@@ -51,15 +51,16 @@ export default function App() {
   };
 
   const renderLeftActions = (goalId) => (
-    <TouchableOpacity
-      style={styles.deleteButton}
-      onPress={() => {
-        setGoals(goals.filter(g => g.id !== goalId));
-      }}
-    >
-      <Text style={styles.deleteText}>Delete</Text>
-    </TouchableOpacity>
-  );
+  <TouchableOpacity
+    style={[styles.deleteButton, { width: 80 }]} // limit visible width
+    onPress={() => {
+      setGoals(goals.filter(g => g.id !== goalId));
+    }}
+  >
+    <Text style={styles.deleteText}>Delete</Text>
+  </TouchableOpacity>
+);
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -71,7 +72,8 @@ export default function App() {
           keyExtractor={(item) => item.id}
           contentContainerStyle={{ paddingBottom: 100 }}
           renderItem={({ item }) => (
-            <Swipeable renderLeftActions={() => renderLeftActions(item.id)}>
+            <Swipeable renderLeftActions={() => renderLeftActions(item.id)} 
+            overshootLeft={false} leftThreshold={30}>
               <View style={styles.goalCard}>
                 <View style={styles.goalHeader}>
                   <Text style={styles.goalTitle}>{item.title}</Text>
@@ -155,7 +157,7 @@ export default function App() {
                   setEditModalVisible(false);
                 }} />
               </View>
-              <View style={{ marginTop: 10 }}>
+              <View>
                 <Button title="Delete Goal" color="red" onPress={() => {
                   setGoals(goals.filter(g => g.id !== selectedGoal.id));
                   setEditModalVisible(false);
@@ -185,7 +187,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 10,
     padding: 15,
-    marginBottom: 15,
     elevation: 3,
   },
   goalHeader: {
@@ -264,12 +265,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   deleteButton: {
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    alignItems: 'flex-start',
-    paddingHorizontal: 20,
-    marginVertical: 10,
-    borderRadius: 10,
+  backgroundColor: 'red',
+  justifyContent: 'center',
+  alignItems: 'center',
+  height: '100%',
+  borderTopRightRadius: 10,
+  borderBottomRightRadius: 10,
+  borderTopLeftRadius: 10,
+  borderBottomLeftRadius: 10,
   },
   deleteText: {
     color: 'white',
